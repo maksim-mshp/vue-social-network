@@ -1,28 +1,40 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
-  </div>
+	<div id="app">
+		<Main v-if="auth"></Main>
+		<Auth v-else></Auth>
+	</div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-
+import Main from "./components/Main.vue";
+import Auth from "./components/Auth.vue";
 export default {
-  name: 'App',
-  components: {
-    HelloWorld
-  }
-}
+	components: {
+		Main,
+		Auth,
+	},
+	data() {
+		return {
+			id: 0,
+			username: "Ivan Petrov",
+			auth: localStorage.getItem("auth") != null,
+		};
+	},
+	methods: {
+		redirect() {
+			this.auth = localStorage.getItem("auth") != null;
+			if (!this.auth && window.location.pathname != "/login" && window.location.pathname != "/register") {
+				this.$router.replace("/login?alert=1");
+			}
+		}
+	},
+	mounted() {
+		this.redirect()
+	},
+	watch: {
+		$route() {
+			this.redirect()
+		},
+	},
+};
 </script>
-
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>
