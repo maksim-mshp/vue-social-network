@@ -8,7 +8,9 @@
 		>
 		<div>
 			<h1>Вход</h1>
-			<router-link to="/register" class="reg_link">Регистрация</router-link>
+			<router-link to="/register" class="reg_link"
+				>Регистрация</router-link
+			>
 			<div class="login_form">
 				<v-text-field
 					label="Email"
@@ -22,7 +24,6 @@
 					name="input-10-2"
 					class="input-group--focused"
 					@click:append="show_pass = !show_pass"
-
 					label="Пароль"
 					placeholder="Пароль"
 					color="teal darken-1"
@@ -54,8 +55,7 @@ export default {
 			users: [],
 			id: -1,
 			show_pass: false,
-			api:
-				"http://37.77.104.246/api/jsonstorage/?id=f783c13b564589e62a759813af8f76cf",
+			api: "http://37.77.104.246/api/jsonstorage/?id=f783c13b564589e62a759813af8f76cf",
 		};
 	},
 	methods: {
@@ -93,8 +93,16 @@ export default {
 			return -1;
 		},
 		get_users() {
-			this.axios.get(this.api).then((response) => {
-				this.users = response.data;
+			let config = {
+				url: "https://api.jsonbin.io/v3/b/61e3f66d0f639830851d0f74",
+				headers: {
+					"Content-Type": "application/json",
+					"X-Master-Key":
+						"$2b$10$tf15G4xzYpMvghS3gZ5q4ug.LaMxTEgt/kSgag4gKYezwhz0Jxr0y",
+				},
+			};
+			this.axios.get(config.url, config).then((response) => {
+				this.users = response.data.record;
 				let isAuth = this.find_user();
 				if (isAuth == 0) {
 					let token = this.generate_token(32);
@@ -103,11 +111,11 @@ export default {
 
 						if (uuid == this.id) {
 							this.users[i].token = token;
-							this.axios.put(this.api, this.users);
-							localStorage.setItem('auth', 1);
-							localStorage.setItem('token', token);
-							localStorage.setItem('id', uuid);
-							this.$router.replace('/feed')
+							this.axios.put(config.url, this.users, config);
+							localStorage.setItem("auth", 1);
+							localStorage.setItem("token", token);
+							localStorage.setItem("id", uuid);
+							this.$router.replace("/feed");
 						}
 					}
 				} else {
@@ -117,8 +125,8 @@ export default {
 		},
 	},
 	mounted() {
-		if (localStorage.getItem('auth') != null) {
-			this.$router.replace('/feed');
+		if (localStorage.getItem("auth") != null) {
+			this.$router.replace("/feed");
 		}
 	},
 };

@@ -39,7 +39,6 @@
 									</v-list-item>
 
 									<v-list-item
-										:to="'/id' + user.id"
 										@click="goMyAccount"
 									>
 										<v-list-item-icon>
@@ -104,8 +103,16 @@ export default {
 			this.$router.replace("/id" + this.user.id);
 		},
 		re_built() {
-			this.axios.get(this.api).then((response) => {
-				this.users = response.data;
+			let config = {
+				url: "https://api.jsonbin.io/v3/b/61e3f66d0f639830851d0f74",
+				headers: {
+					"Content-Type": "application/json",
+					"X-Master-Key":
+						"$2b$10$tf15G4xzYpMvghS3gZ5q4ug.LaMxTEgt/kSgag4gKYezwhz0Jxr0y",
+				}
+			};
+			this.axios.get(config.url, config).then((response) => {
+				this.users = response.data.record;
 
 				for (let i = 0; i < this.users.length; i++) {
 					let item = this.users[i];

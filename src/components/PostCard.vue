@@ -7,8 +7,9 @@
 						{{ post.title }}
 					</v-list-item-title>
 					<v-list-item-subtitle>{{ post.text }}</v-list-item-subtitle>
-				</v-list-item-content> </v-list-item>
-            <v-card-actions>
+				</v-list-item-content>
+			</v-list-item>
+			<v-card-actions>
 				<v-btn text color="teal darken-1" :to="'/id' + post.author">
 					Автор: {{ get_user_name(post.author) }}
 				</v-btn>
@@ -36,10 +37,16 @@ export default {
 		},
 	},
 	mounted() {
-		let api =
-			"http://37.77.104.246/api/jsonstorage/?id=f783c13b564589e62a759813af8f76cf";
-		this.axios.get(api).then((response) => {
-			this.users = response.data;
+		let config = {
+			url: "https://api.jsonbin.io/v3/b/61e3f66d0f639830851d0f74",
+			headers: {
+				"Content-Type": "application/json",
+				"X-Master-Key":
+					"$2b$10$tf15G4xzYpMvghS3gZ5q4ug.LaMxTEgt/kSgag4gKYezwhz0Jxr0y",
+			},
+		};
+		this.axios.get(config.url, config).then((response) => {
+			this.users = response.data.record;
 		});
 	},
 };

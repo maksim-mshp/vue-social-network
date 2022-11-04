@@ -28,7 +28,6 @@
 					name="input-10-2"
 					class="input-group--focused"
 					@click:append="show_pass = !show_pass"
-
 					label="Пароль"
 					placeholder="Пароль"
 					color="teal darken-1"
@@ -58,10 +57,9 @@ export default {
 			login: "",
 			password: "",
 			id: -1,
-			api:
-				"http://37.77.104.246/api/jsonstorage/?id=f783c13b564589e62a759813af8f76cf",
-            users: [],
-            show_pass: false
+			api: "http://37.77.104.246/api/jsonstorage/?id=f783c13b564589e62a759813af8f76cf",
+			users: [],
+			show_pass: false,
 		};
 	},
 	methods: {
@@ -79,8 +77,18 @@ export default {
 		},
 		regist() {
 			let ph = require("password-hash");
-			this.axios.get(this.api).then((response) => {
-				this.users = response.data;
+
+			let config = {
+				url: "https://api.jsonbin.io/v3/b/61e3f66d0f639830851d0f74",
+				headers: {
+					"Content-Type": "application/json",
+					"X-Master-Key":
+						"$2b$10$tf15G4xzYpMvghS3gZ5q4ug.LaMxTEgt/kSgag4gKYezwhz0Jxr0y",
+				}
+			};
+
+			this.axios.get(config.url, config).then((response) => {
+				this.users = response.data.record;
 
 				this.id = this.users[this.users.length - 1].id + 1;
 
@@ -97,10 +105,13 @@ export default {
 				localStorage.setItem("token", user.token);
 				localStorage.setItem("id", user.id);
 
-				this.users.push(user);
-                this.axios.put(this.api, this.users);
-                
-                this.$router.replace('/feed');
+				let k = this.users
+				k.push(user);
+
+				console.log(k);
+				this.axios.put(config.url, k, config);
+
+				this.$router.replace("/feed");
 			});
 		},
 	},

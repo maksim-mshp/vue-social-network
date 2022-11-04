@@ -45,8 +45,16 @@ export default {
 		};
 	}, methods: {
         addpost() {
-            this.axios.get(this.api).then((response) => {
-                this.posts = response.data;
+					let config = {
+				url: "https://api.jsonbin.io/v3/b/63659b3b2b3499323bf5bfa8",
+				headers: {
+					"Content-Type": "application/json",
+					"X-Master-Key":
+						"$2b$10$tf15G4xzYpMvghS3gZ5q4ug.LaMxTEgt/kSgag4gKYezwhz0Jxr0y",
+				}
+			};
+            this.axios.get(config.url, config).then((response) => {
+                this.posts = response.data.record;
                 this.posts.push({
                     post_id: this.posts[this.posts.length - 1].post_id + 1,
                     title: this.post.title,
@@ -54,7 +62,7 @@ export default {
                     author: parseInt(localStorage.getItem('id')),
                 });
 
-                this.axios.put(this.api, this.posts);
+                this.axios.put(config.url, this.posts, config);
                 this.$router.replace('/feed');
 			});
         }
